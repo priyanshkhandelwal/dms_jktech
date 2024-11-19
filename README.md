@@ -63,13 +63,13 @@ To set up and run the project, follow these steps:
     ```sql
     -- Insert ADMIN role into the role table
     INSERT INTO role (id, role_name, created_at, created_by)
-    VALUES (gen_random_uuid(), 'ADMIN', NOW(), 'system');
+    VALUES ('b2ff3492-deb3-443b-93f5-12bb3090a4d3', 'ADMIN', NOW(), 'system');
     
     -- Insert an ADMIN user into the users table
     INSERT INTO users (id, first_name, last_name, email, password, mobile, role, created_at, created_by)
     VALUES (gen_random_uuid(), 'Admin', 'User', 'admin@example.com', 
     '$2a$10$XTJV1oc6gaY1Qh1.BiOUSuESTuekfRRx096pvVqeCubUI9qb8HZxa', 
-    '1234567890', 'ADMIN', NOW(), 'system');
+    '1234567890', 'b2ff3492-deb3-443b-93f5-12bb3090a4d3', NOW(), 'system');
     ```
 
     > These queries will populate the database with an initial ADMIN role and an ADMIN user with the email `admin@example.com` and password `12345678`. You can use these credentials to log into the application.
