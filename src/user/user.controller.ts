@@ -15,6 +15,8 @@ import { AssignRoleDto, UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/decorators/public.decorator';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { ViewerGuard } from 'src/guards/viewer.guard';
+import { EditorGuard } from 'src/guards/editor.guard';
 import { LoginDto } from './dto/login.dto';
 
 @ApiTags('Users') // Tags for Swagger documentation
@@ -80,26 +82,28 @@ export class UserController {
   }
 
   /**
-   * Fetches all users.
+   * Fetches all users. This should be accessible to admins only.
    * @returns Response from the userService findAll method.
    */
   @Get()
+  @UseGuards(AdminGuard, EditorGuard, ViewerGuard) // Restricts this route to admins only
   findAll() {
     return this.userService.findAll();
   }
 
   /**
-   * Fetches a single user by ID.
+   * Fetches a single user by ID. This should be accessible to admins, editors, or the user themselves.
    * @param id - The user ID.
    * @returns Response from the userService findOne method.
    */
   @Get(':id')
+  @UseGuards(AdminGuard, EditorGuard, ViewerGuard) // Accessible to admins, editors, or the user
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
 
   /**
-   * Updates user details by ID.
+   * Updates user details by ID. This should be restricted to admins only.
    * @param id - The user ID.
    * @param updateUserDto - The data to update the user.
    * @param req - Request object to access additional request details.
@@ -116,7 +120,7 @@ export class UserController {
   }
 
   /**
-   * Removes a user by ID.
+   * Removes a user by ID. This should be restricted to admins only.
    * @param id - The user ID.
    * @returns Response from the userService remove method.
    */
