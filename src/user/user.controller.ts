@@ -15,8 +15,6 @@ import { AssignRoleDto, UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/decorators/public.decorator';
 import { AdminGuard } from 'src/guards/admin.guard';
-import { ViewerGuard } from 'src/guards/viewer.guard';
-import { EditorGuard } from 'src/guards/editor.guard';
 import { LoginDto } from './dto/login.dto';
 
 @ApiTags('Users') // Tags for Swagger documentation
@@ -58,8 +56,8 @@ export class UserController {
    * @param loginDto - The login credentials.
    * @returns Response from the userService login method.
    */
-  @Post('login')
   @Public() // Marks this route as publicly accessible
+  @Post('login')
   login(@Body() loginDto: LoginDto) {
     return this.userService.login(loginDto);
   }
@@ -86,7 +84,6 @@ export class UserController {
    * @returns Response from the userService findAll method.
    */
   @Get()
-  @UseGuards(AdminGuard, EditorGuard, ViewerGuard) // Restricts this route to admins only
   findAll() {
     return this.userService.findAll();
   }
@@ -97,7 +94,6 @@ export class UserController {
    * @returns Response from the userService findOne method.
    */
   @Get(':id')
-  @UseGuards(AdminGuard, EditorGuard, ViewerGuard) // Accessible to admins, editors, or the user
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
