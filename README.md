@@ -38,7 +38,25 @@ To set up and run the project, follow these steps:
     npm run migrate
     ```
 
-5. **Seed default data into the database:**
+5. **Compile and run:**
+
+    ```bash
+    npm run start
+    ```
+
+6. **Compile and run in watch mode:**
+
+    ```bash
+    npm run start:dev
+    ```
+
+7. **Compile and run in prod mode:**
+
+    ```bash
+    npm run start:prod
+    ```
+
+8. **Seed default data into the database:**
 
     Run the following SQL queries to insert necessary default data:
 
