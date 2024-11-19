@@ -14,8 +14,6 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminGuard } from 'src/guards/admin.guard';
-import { ViewerGuard } from 'src/guards/viewer.guard';
-import { EditorGuard } from 'src/guards/editor.guard';
 
 // Define Swagger metadata for the Roles API
 @ApiTags('Roles') // Specify the tag for grouping the roles-related endpoints in Swagger UI
@@ -37,8 +35,7 @@ export class RoleController {
   /**
    * GET endpoint to fetch all roles. Only accessible by admins.
    */
-  @Get()
-  @UseGuards(AdminGuard, ViewerGuard, EditorGuard) // Only admins can fetch all roles
+  @Get() // Only admins can fetch all roles
   findAll() {
     return this.roleService.findAll(); // Call the service to fetch all roles
   }
@@ -46,8 +43,7 @@ export class RoleController {
   /**
    * GET endpoint to fetch a role by its ID. Accessible by admins, editors, or viewers if necessary.
    */
-  @Get(':id')
-  @UseGuards(AdminGuard, EditorGuard, ViewerGuard) // Accessible to admins, editors, or specific role-based viewers
+  @Get(':id') // Accessible to admins, editors, or specific role-based viewers
   findOne(@Param('id') id: string) {
     return this.roleService.findOne(id); // Fetch the specific role by ID
   }

@@ -60,7 +60,7 @@ describe('RoleController', () => {
         { id: '2', roleName: 'ADMIN' },
       ];
 
-      jest.spyOn(roleService, 'findAll').mockResolvedValue(result);
+      jest.spyOn(roleService, 'findAll').mockResolvedValue(result as any);
 
       expect(await controller.findAll()).toBe(result);
       expect(roleService.findAll).toHaveBeenCalled();

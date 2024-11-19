@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -6,11 +6,15 @@ import { DrizzleModule } from './drizzle/drizzle.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './user/user.module';
-import { AuthMiddleware } from './middlewares/auth.middleware';
 import { RoleModule } from './role/role.module';
 import { drizzleProvider } from './drizzle/drizzle.provider';
 import { DocumentModule } from './document/document.module';
+import { APP_GUARD } from '@nestjs/core';
 
+import * as dotenv from 'dotenv';
+import { AuthGuard } from './guards/auth.guard';
+dotenv.config();
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,7 +32,8 @@ import { DocumentModule } from './document/document.module';
       synchronize: false, // Or true depending on your case
     }),
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      global: true,
+      secret: process.env.JWT_SECRET || 'your_secret_key',
       signOptions: { expiresIn: '24h' },
     }),
     UserModule,
@@ -36,10 +41,13 @@ import { DocumentModule } from './document/document.module';
     DocumentModule,
   ],
   controllers: [AppController],
-  providers: [AppService, drizzleProvider],
+  providers: [
+    AppService,
+    drizzleProvider,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard, // Apply AuthGuard globally
+    },
+  ],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}

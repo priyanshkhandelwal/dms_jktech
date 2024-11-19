@@ -41,7 +41,7 @@ export class DocumentService {
    */
   async downloadDocument(id: string) {
     const document = await this.db
-      .select({})
+      .select()
       .from(schema.document)
       .where(eq(schema.document.id, id));
     if (!document) {
